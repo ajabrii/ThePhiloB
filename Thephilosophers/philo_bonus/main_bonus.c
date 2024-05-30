@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 09:42:38 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/25 17:51:06 by kali             ###   ########.fr       */
+/*   Updated: 2024/05/30 10:14:17 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philo_bonus.h"
 
+// try to fix the ./philo_bonus 4 310 200 100 one philo should die(the output is not correct)
 void	semaphore_init(t_ball *data)
 {
 	sem_unlink("/death");
@@ -36,8 +37,9 @@ static void	get_init(t_ball *data)
 		data->nt_eat = -42;
 	else
 		data->nt_eat = ft_atol(data->args[4], -1);
-    data->philos.all = data;
-    data->philos.nb_meal = 0;
+	data->flag = 0;
+	data->philos.all = data;
+	data->philos.nb_meal = 0;
     data->philos.lst_time = QUIT;
 	semaphore_init(data);
 }
@@ -78,6 +80,7 @@ int	main(int argc, char **argv)
 	else
 	{
 		process_f(&all);
+		// system("leaks philo_bonus");
     }
 	return (0);
 }

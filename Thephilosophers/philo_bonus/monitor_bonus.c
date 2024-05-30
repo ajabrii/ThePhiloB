@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:21:41 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/25 18:29:02 by kali             ###   ########.fr       */
+/*   Updated: 2024/05/30 10:26:42 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 void kill_philos(t_ball *data)
 {
-    set_state(data, DIED);
+	sem_wait(data->psem);
+	data->flag = 1;
+	sem_post(data->psem);
+	sem_open("/death", O_CREAT, 0644, 0);
 }
 
 bool check_death(t_ball *data)
@@ -23,12 +26,12 @@ bool check_death(t_ball *data)
             && ft_gettime() - get_lst_time(data) > data->t_die)
     {
         set_state(data, DIED);
-        return (false);
-    }
+		return (false);
+	}
     return (true);
 }
 
-bool	someone_died(void)
+bool	philo_died(void)
 {
 	sem_t	*death;
 
@@ -39,32 +42,31 @@ bool	someone_died(void)
 	return (true);
 }
 
-void	let_others_know(void)
-{
-	sem_open("/death", O_CREAT, 0644, 0);
-}
-
 void	*check_state(void *var)
 {
 	t_ball	*data;
 
+
 	data = (t_ball *)var;
 	while (check_status(get_status(data)))
 	{
-        if (someone_died())
+        if (philo_died())
             return (set_state(data, END), NULL);
 		if (!check_death(data))
 		{
 			sem_wait(data->psem);
-			if (!check_death(data) && someone_died() == false)
+			if (!check_death(data) && philo_died() == false)
 			{
-				set_state(data, DIED);
-				let_others_know();
-                printf(PER "%ld   %d" RES "    %s\n", ft_gettime() - data->start_t,
-                                    data->philos.id, "died");
+				printf("%d\n", data->flag);
+				if (!data->flag)
+				{
+					printf(PER "%ld   %d" RES "   %s\n", ft_gettime() - data->start_t, data->philos.id, RED "died" RES);
+				}
+				kill_philos(data);
+    			set_state(data, DIED);
 				sem_post(data->psem);
-                break;
-            }
+				break;
+			}
 			sem_post(data->psem);
 		}
 		usleep(1000);

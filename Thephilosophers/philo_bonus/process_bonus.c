@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 21:38:51 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/25 19:09:39 by kali             ###   ########.fr       */
+/*   Updated: 2024/05/29 20:19:15 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void    routine(t_ball *data, int id)
     if (set_philosopher(data, id) == false)
         ft_error("Error in set_philosophers");
     if (data->philos.id % 2 == 0)
-        ft_usleep(data->t_eat);
+        ft_usleep(data->t_eat - 10);
     if (data->nphilo % 2 != 0)
     {
         if (data->philos.id == data->nphilo && data->nphilo > 1)
@@ -63,18 +63,21 @@ void    routine(t_ball *data, int id)
         ft_error("Error in pthread create");
     while (1)
     {
-        if (!eating(data) || !check_status(get_status(data)))
+        if (!eating(data) || !check_status(get_status(data))
+            || !check_status(get_status(data)))
         {
             // printf("eat return false\n");
-            break;
+                break;
         }
-        if (!sleeping(data) || !check_status(get_status(data)))
+        if (!sleeping(data) || !check_status(get_status(data))
+                || !check_status(get_status(data)))
         {
-            break;
+            if (!check_status(get_status(data)))
+                break;
         }
-        if (!thinking(data) || !check_status(get_status(data)))
+        if (!thinking(data) || !check_status(get_status(data))
+                || !check_status(get_status(data)))
         {
-            // printf("think return false\n");
             break;
         }
     }
@@ -82,6 +85,7 @@ void    routine(t_ball *data, int id)
         exit(0);
     sem_close(data->philos.semphilo);
 }
+
 int     process_f(t_ball *data)
 {
     int pid;

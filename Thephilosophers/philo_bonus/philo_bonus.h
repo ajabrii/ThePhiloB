@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kali <kali@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 09:13:04 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/25 18:13:26 by kali             ###   ########.fr       */
+/*   Updated: 2024/05/30 10:13:51 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ typedef struct s_philo_bonus
 struct s_all_bonus
 {
     int					ac;
-	char				**av;
-	int					size;
+    int                 flag;
+    char                **av;
+    int					size;
 	char				**args;
     char                *semid;
     long                nphilo;
@@ -102,7 +103,7 @@ bool    eating(t_ball *data);
 
 /* <monitor_bonus.c> */
 void    *check_state(void *var);
-bool someone_died(void);
+bool    philo_died(void);
 /* </monitor_bonus.c> */
 
 #endif

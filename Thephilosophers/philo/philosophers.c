@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 15:41:45 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/05 14:30:10 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/05/29 16:18:07 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	ft_threads(t_all *data)
 	if (data->nt_eat > 0)
 		pthread_create(&data->motnitor2, NULL, &ft_isfull, data);
 }
-
 void	ft_join(t_all *data)
+
 {
 	int	i;
 
