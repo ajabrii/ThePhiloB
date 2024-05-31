@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:59:07 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/19 12:18:55 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/05/30 18:25:43 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ int	main(int argc, char **argv)
 	else
 	{
 		get_init(&all);
-		// system("leaks philo");
 	}
 	return (0);
 }

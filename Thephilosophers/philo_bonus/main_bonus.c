@@ -6,13 +6,12 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 09:42:38 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/30 10:14:17 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:19:02 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo_bonus.h"
+#include "philo_bonus.h"
 
-// try to fix the ./philo_bonus 4 310 200 100 one philo should die(the output is not correct)
 void	semaphore_init(t_ball *data)
 {
 	sem_unlink("/death");
@@ -24,9 +23,8 @@ void	semaphore_init(t_ball *data)
 	data->psem = sem_open("/psem", O_CREAT, 0644, 1);
 	if (data->psem == SEM_FAILED)
 		ft_error("Error in data->psem");
-	// sem_unlink("/sem_forks");
-	// sem_unlink("/psem");
 }
+
 static void	get_init(t_ball *data)
 {
 	data->nphilo = ft_atol(data->args[0], 0);
@@ -37,10 +35,9 @@ static void	get_init(t_ball *data)
 		data->nt_eat = -42;
 	else
 		data->nt_eat = ft_atol(data->args[4], -1);
-	data->flag = 0;
 	data->philos.all = data;
 	data->philos.nb_meal = 0;
-    data->philos.lst_time = QUIT;
+	data->philos.lst_time = QUIT;
 	semaphore_init(data);
 }
 
@@ -57,16 +54,14 @@ static int	parsing(int argc, char **argv, t_ball *data)
 		return (0);
 	if (!check_nbr(data))
 		return (0);
-    get_init(data);
-    while (data->args[++i])
+	get_init(data);
+	while (data->args[++i])
 	{
-        free(data->args[i]);
+		free(data->args[i]);
 	}
 	free(data->args);
 	return (1);
 }
-
-
 
 int	main(int argc, char **argv)
 {
@@ -80,7 +75,8 @@ int	main(int argc, char **argv)
 	else
 	{
 		process_f(&all);
-		// system("leaks philo_bonus");
-    }
+		sem_close(all.forks);
+		sem_close(all.psem);
+	}
 	return (0);
 }

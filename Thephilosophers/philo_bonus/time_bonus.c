@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:46:30 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/30 10:08:33 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/05/31 10:13:12 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ bool	ft_output(t_ball *data, char *msg)
 		sem_post(data->psem);
 		return (false);
 	}
-	printf(PER "%ld   %d" RES "    %s\n", ft_gettime() - data->start_t, data->philos.id, msg);
+	printf(PER "%ld   %d" RES "    %s\n", ft_gettime() - data->start_t,
+		data->philos.id, msg);
 	sem_post(data->psem);
 	return (true);
 }

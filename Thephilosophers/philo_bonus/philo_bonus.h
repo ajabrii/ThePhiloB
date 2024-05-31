@@ -6,7 +6,7 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 09:13:04 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/30 10:13:51 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:09:24 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,96 +14,100 @@
 # define PHILO_BONUS_H
 
 # include "utils_bonus/utils.h"
+# include <fcntl.h>
 # include <pthread.h>
+# include <semaphore.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <fcntl.h>
-# include <semaphore.h>
 
-typedef struct s_all_bonus t_ball;
+typedef struct s_all_bonus	t_ball;
 typedef enum s_state
 {
-    EAT,
-    SLEEP,
-    THINK,
-    DIED,
-    FULL,
-    END,
-    QUIT
-} t_state;
+	EAT,
+	SLEEP,
+	THINK,
+	DIED,
+	FULL,
+	END,
+	QUIT
+}							t_state;
 
 typedef struct s_philo_bonus
 {
-    int					id;
-	int					nb_meal;
-	long				lst_time;
-	t_ball				*all;
-    sem_t               *semphilo;
-    t_state             status;
-}                       t_bphilo;
+	int						id;
+	int						nb_meal;
+	long					lst_time;
+	t_ball					*all;
+	sem_t					*semphilo;
+	t_state					status;
+}							t_bphilo;
 
-struct s_all_bonus
+struct						s_all_bonus
 {
-    int					ac;
-    int                 flag;
-    char                **av;
-    int					size;
-	char				**args;
-    char                *semid;
-    long                nphilo;
-    long				t_die;
-	long				t_eat;
-	long				t_sleep;
-	long				nt_eat;
-    long                start_t;
-    sem_t               *forks;
-    sem_t               *psem;
-    t_bphilo            philos;
-    pthread_t           monitor1;
+	int						ac;
+	char					**av;
+	int						size;
+	char					**args;
+	char					*semid;
+	long					nphilo;
+	long					t_die;
+	long					t_eat;
+	long					t_sleep;
+	long					nt_eat;
+	long					start_t;
+	sem_t					*forks;
+	sem_t					*psem;
+	t_bphilo				philos;
+	pthread_t				monitor1;
 };
 
-
-
 /* <tools_bonus.c> */
-char    **retunr_args(t_ball *ps);
-int     count_size(char **av);
-int     check_nbr(t_ball *ps);
-void    *ft_malloc(unsigned int size);
+char						**retunr_args(t_ball *ps);
+int							count_size(char **av);
+int							check_nbr(t_ball *ps);
+void						*ft_malloc(unsigned int size);
 /* </tools_bonus.c> */
 
 /* <time_bonus.c> */
-long    ft_gettime(void);
-void    ft_usleep(long nb);
-bool    ft_output(t_ball *data, char *msg);
+long						ft_gettime(void);
+void						ft_usleep(long nb);
+bool						ft_output(t_ball *data, char *msg);
 /* </time_bonus.c> */
 
 /* <getters_bonus.c> */
-t_state get_status(t_ball *data);
-long    get_lst_time(t_ball *data);
+t_state						get_status(t_ball *data);
+long						get_lst_time(t_ball *data);
 /* </getters_bonus.c> */
 
 /* <setters_bonus.c> */
-bool    set_philosopher(t_ball *data, int phid);
-void    set_lst_time(t_ball *data);
-void    set_state(t_ball *data, t_state state);
+bool						set_philosopher(t_ball *data, int phid);
+void						set_lst_time(t_ball *data);
+void						set_state(t_ball *data, t_state state);
 /* </setters_bonus.c> */
 
 /* <process_bonus.c> */
-int     process_f(t_ball *data);
-bool    check_status(t_state state);
+int							process_f(t_ball *data);
+bool						check_status(t_state state);
+void						set_start_t(t_ball *data);
 /* </process_bonus.c> */
 
 /* <eating_bonus.c> */
-bool    eating(t_ball *data);
+bool						eating(t_ball *data);
 /* </eating_bonus.c> */
 
 /* <monitor_bonus.c> */
-void    *check_state(void *var);
-bool    philo_died(void);
+void						*check_state(void *var);
+bool						philo_died(void);
 /* </monitor_bonus.c> */
+
+/* <routine_bonus.c> */
+void						routine(t_ball *data, int id);
+bool						sleeping(t_ball *data);
+bool						thinking(t_ball *data);
+/* <routine_bonus.c> */
 
 #endif

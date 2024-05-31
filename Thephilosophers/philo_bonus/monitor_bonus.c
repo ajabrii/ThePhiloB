@@ -6,36 +6,40 @@
 /*   By: ajabri <ajabri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:21:41 by ajabri            #+#    #+#             */
-/*   Updated: 2024/05/30 10:26:42 by ajabri           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:00:48 by ajabri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo_bonus.h"
+#include "philo_bonus.h"
 
-void kill_philos(t_ball *data)
+void	kill_philos(void)
 {
-	sem_wait(data->psem);
-	data->flag = 1;
-	sem_post(data->psem);
 	sem_open("/death", O_CREAT, 0644, 0);
 }
 
-bool check_death(t_ball *data)
+bool	check_death(t_ball *data)
 {
-    if (get_status(data) != EAT
-            && ft_gettime() - get_lst_time(data) > data->t_die)
-    {
-        set_state(data, DIED);
+	sem_wait(data->psem);
+	if (get_status(data) != EAT && ft_gettime()
+		- get_lst_time(data) > data->t_die)
+	{
+		set_state(data, DIED);
 		return (false);
 	}
-    return (true);
+	else if (get_status(data) == DIED)
+	{
+		sem_post(data->psem);
+		return (true);
+	}
+	sem_post(data->psem);
+	return (true);
 }
 
 bool	philo_died(void)
 {
 	sem_t	*death;
 
-	death = sem_open("/death", AT_EACCESS, 0);
+	death = sem_open("/death", 0, 0);
 	if (death == SEM_FAILED)
 		return (false);
 	sem_close(death);
@@ -46,33 +50,55 @@ void	*check_state(void *var)
 {
 	t_ball	*data;
 
-
 	data = (t_ball *)var;
 	while (check_status(get_status(data)))
 	{
-        if (philo_died())
-            return (set_state(data, END), NULL);
+		if (philo_died())
+			return (set_state(data, END), NULL);
 		if (!check_death(data))
 		{
 			sem_wait(data->psem);
 			if (!check_death(data) && philo_died() == false)
 			{
-				printf("%d\n", data->flag);
-				if (!data->flag)
-				{
-					printf(PER "%ld   %d" RES "   %s\n", ft_gettime() - data->start_t, data->philos.id, RED "died" RES);
-				}
-				kill_philos(data);
-    			set_state(data, DIED);
+				set_state(data, DIED);
+				kill_philos();
+				printf(PER "%ld   %d" RES "    %s\n", ft_gettime()
+					- data->start_t, data->philos.id, "died");
 				sem_post(data->psem);
-				break;
+				break ;
 			}
 			sem_post(data->psem);
 		}
 		usleep(1000);
 	}
-    return (NULL);
+	return (NULL);
 }
+
+// void *check_state(void *var)
+// {
+//     t_ball *data;
+
+//     data = (t_ball *)var;
+//     while (check_status(get_status(data)))
+//     {
+//         if (philo_died())
+//             return (set_state(data, END), NULL);
+//         if (!check_death(data))
+//         {
+//             sem_wait(data->psem);
+//             if (get_status(data) == DIED && philo_died() == false)
+//             {
+//                 printf(PER "%ld   %d" RES "    %s\n", ft_gettime()
+// - data->start_t, data->philos.id, "died");
+//                 sem_post(data->psem);
+//                 break ;
+//             }
+//             sem_post(data->psem);
+//         }
+//         usleep(1000);
+//     }
+//     return (NULL);
+// }
 
 // void *check_state(void *var)
 // {
@@ -119,7 +145,8 @@ void	*check_state(void *var)
 // //     while (1)
 // //     {
 
-// //         if (data->philos.status == DIED) { // Check if philosopher is already dead
+// //         if (data->philos.status == DIED) {
+// Check if philosopher is already dead
 // //             exit(0);
 // //         }
 // //         long current_time = ft_gettime();
@@ -138,5 +165,5 @@ void	*check_state(void *var)
 // //         }
 // //         usleep(1000); // Check every 1 ms
 // //     }
-// //     return NULL;
+// //     return (NULL);
 // // }

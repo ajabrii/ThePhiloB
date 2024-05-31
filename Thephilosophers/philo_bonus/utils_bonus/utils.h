@@ -34,6 +34,6 @@ void	*ft_memmove(void *dst, void *src, size_t n);
 char	*ft_strjoin(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, size_t n);
 int		ft_isdigit(int c);
-char    *ft_itoa(int n);
+char	*ft_itoa(int n);
 
 #endif
